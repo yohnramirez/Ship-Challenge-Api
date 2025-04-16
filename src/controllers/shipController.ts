@@ -36,18 +36,17 @@ export const postTeapot = (req: Request, res: Response) => {
 export const getPhaseChange = (req: Request, res: Response) => {
   const param = req.query.pressure;
 
-  if (!param) res.status(400).json({ error: "pressure param is required." });
+  if (!param) throw new Error("pressure param is required.");
 
   const pressure = Number(param);
 
-  if (isNaN(pressure))
-    res.status(400).json({ error: "pressure param must be a number." });
+  if (isNaN(pressure)) throw new Error("pressure param must be a number.");
 
   const result = getInterpolatePressure(pressure, PHASES_DATA);
 
-  if (!result) res.status(400).json({ error: "pressure out of range." });
+  if (!result) throw new Error("pressure out of range.");
 
-  res.send(result);
+  res.json(result);
 };
 
 export const getInterpolatePressure = (
